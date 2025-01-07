@@ -33,7 +33,12 @@ class Message(MessageCreate):
 
 @app.on_event("startup")
 async def startup_db_client():
-    app.mongodb_client = AsyncIOMotorClient(settings.MONGODB_URL, tlsCAFile=certifi.where())
+    app.mongodb_client = AsyncIOMotorClient(
+        settings.MONGODB_URL,
+        tlsCAFile=certifi.where(),
+        ssl=True,
+        ssl_cert_reqs='CERT_NONE'
+    )
     app.mongodb = app.mongodb_client[settings.DATABASE_NAME]
     
     # Create indexes
